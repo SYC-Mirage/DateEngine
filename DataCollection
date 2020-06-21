@@ -1,0 +1,47 @@
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+
+def get_page(n):
+    # 请求URL
+    url = base_url+str(n+1)+'.shtml'
+    print(url)
+    # 得到页面内容
+    headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36'}
+    html = requests.get(url, headers=headers, timeout=10)
+    content = html.text
+    # 通过content创建BeautifulSoup对象
+    soup = BeautifulSoup(content, 'html.parser', from_encoding='utf-8')
+    return soup
+
+def analyze(soup):
+    # 找到完整的投诉信息框
+    temp = soup.find('div',class_="tslb_b")
+    tr_list = temp.find_all('tr')
+    print(tr_list)
+    ins = ['id', 'brand', 'car_model', 'type', 'desc', 'problem', 'datetime', 'status']
+    df = pd.DataFrame(columns=ins)
+
+    for tr in tr_list:
+        result = {}
+        td_list = tr.find_all('td')
+
+        if len(td_list) > 0:
+            # 解析各字段内容
+            result['id'],result['brand'],result['car_model'],result['type'],result['desc'],result['problem'],result['datetime'],result['status'] = [td_list[j].text for j in range(8)]
+            df = df.append(result,ignore_index=True)
+    return df
+
+page_number = 20
+base_url = 'http://www.12365auto.com/zlts/0-0-0-0-0-0_0-0-0-0-0-0-0-'
+
+ins = ['id','brand','car_model','type','desc','problem','datetime','status']
+df = pd.DataFrame(columns=ins)
+for i in range(page_number):
+    soup = get_page(i)
+    temp = analyze(soup)
+    df = df.append(temp,ignore_index=True)
+
+
+df.to_csv('complain.csv',index=False,encoding='gbk')
+print(df)
