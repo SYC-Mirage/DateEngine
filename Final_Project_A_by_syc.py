@@ -26,7 +26,7 @@ for div in soup.find_all('div',class_='search-result-list-item'):
     car_names.append(car_name)
     car_prices.append(car_price)
     imgs.append(car_img)
-    print(car_name,'  ',car_price,' ',car_img)
+#    print(car_name,'  ',car_price,' ',car_img)
 car_info['车辆名称'] = car_names
 car_info['车辆价格'] = car_prices
 car_info['车辆照片'] = imgs
