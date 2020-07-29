@@ -27,19 +27,19 @@ train = min_max_scaler.fit_transform(train)
 
 # # 运用kmeans进行聚类，并用手肘法选择簇数
 # sse = []
-# for k in range(2,11):
+# for k in range(2,80):
 #     kmeans = KMeans(n_clusters=k)
 #     kmeans.fit(train)
 #     # 计算簇内误差平方和
 #     sse.append(kmeans.inertia_)
-# x = range(2,11)
+# x = range(2,80)
 # plt.xlabel('K')
 # plt.ylabel('SSE')
 # plt.plot(x,sse,'o-')
 # plt.show()
 
-# 经过手肘法确认簇数为5或6为宜
-kmeans = KMeans(n_clusters=6)
+# 经过手肘法确认簇数为10-15为宜
+kmeans = KMeans(n_clusters=12)
 kmeans.fit(train)
 predict = kmeans.predict(train)
 
