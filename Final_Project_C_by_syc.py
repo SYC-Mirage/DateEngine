@@ -16,23 +16,10 @@ labels.remove('CarName')
 # 创建分类用数据
 train = car_info[labels]
 
-# 将数据中的字符串数据转化为数字
+# 将数据中的字符串数据处理为数字
+le = preprocessing.LabelEncoder()
 for label in labels:
-    # 判断是否是字符串
-    if isinstance(train[label].loc[0],str):
-        # print(label," is string data")
-
-        # 将不重复的元素取出，并保存进列表
-        label_set = set(train[label])
-        label_list = []
-        for i in label_set:
-            label_list.append(i)
-
-        # 将字符串内容转化为数字
-        for j in range(0,len(train[label])):
-            content = train[label].loc[j]
-            value = label_list.index(content) + 1
-            train[label].loc[j] = value
+    train[label] = le.fit_transform(train[label])
 
 # 将数据规范化
 min_max_scaler = preprocessing.MinMaxScaler()
