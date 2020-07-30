@@ -39,7 +39,7 @@ train = min_max_scaler.fit_transform(train)
 # plt.show()
 
 # 经过手肘法确认簇数为10-15为宜
-kmeans = KMeans(n_clusters=12)
+kmeans = KMeans(n_clusters=15)
 kmeans.fit(train)
 predict = kmeans.predict(train)
 
@@ -48,3 +48,17 @@ car_info['聚类结果'] = predict
 car_info.to_csv('聚类结果.csv',encoding='gbk',index=False)
 
 # print(car_info)
+# 找出vw的车型
+vw_cars = car_info[car_info['CarName'].str.contains('vw')|car_info['CarName'].str.contains('volkswagen')]['CarName']
+
+# 针对每种车型搜索竞品车型
+for car in set(vw_cars):
+    car_label = car_info.loc[car_info['CarName']==car,'聚类结果']
+    for temp in car_label:
+        car_label = temp
+
+    compete_cars = car_info.loc[car_info['聚类结果']==car_label,'CarName']
+    # 将vw车型从竞品车型中去除
+    compete_cars = compete_cars.loc[~(compete_cars.str.contains('volkswagen'))&~(compete_cars.str.contains('vw'))]
+    compete_cars_list = compete_cars.tolist()
+    print("The compete cars of ",car," are:\n",compete_cars_list)
