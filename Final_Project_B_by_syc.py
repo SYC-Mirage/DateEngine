@@ -2,8 +2,8 @@ import pandas as pd
 from efficient_apriori import apriori
 
 # 读取源数据
-raw_guests = pd.read_csv('D:\数据分析学习\数据分析训练营-结营考试\数据分析训练营-结营考试\ProjectB\客户.csv',sep=',',encoding='gbk')
-orders = pd.read_csv('D:\数据分析学习\数据分析训练营-结营考试\数据分析训练营-结营考试\ProjectB\订单表.csv',sep=',',encoding='gbk')
+raw_guests = pd.read_csv('客户.csv',sep=',',encoding='gbk')
+orders = pd.read_csv('订单表.csv',sep=',',encoding='gbk')
 
 # 将客户ID取出，以每一个客户的销售作为一项
 guests = raw_guests['客户ID']
